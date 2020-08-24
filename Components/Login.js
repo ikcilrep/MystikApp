@@ -25,11 +25,6 @@ const Login = () => (
             label='Password'
         />
         <Button
-            icon={{
-                name: "check",
-                size: 15,
-                color: "black"
-            }}
             title="Log in"
         />
     </View>
