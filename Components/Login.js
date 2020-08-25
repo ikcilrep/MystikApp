@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 
@@ -11,26 +11,35 @@ const styles = StyleSheet.create({
     }
 });
 
-const Login = () => (
-    <View style={styles.container}>
-        <Input
-            placeholder='Username'
-            leftIcon={{ type: 'font-awesome', name: 'user', color:'tomato' }}
-            label='Username'
-            labelStyle={{color: 'tomato'}}
-        />
-        <Input
-            placeholder='Password'
-            leftIcon={{ type: 'font-awesome', name: 'lock', color:'tomato' }}
-            secureTextEntry={true}
-            label='Password'
-            labelStyle={{color: 'tomato'}}
-        />
-        <Button
-            title="Log in"
-            buttonStyle={{backgroundColor:'tomato'}}
-        />
-    </View>
-);
+const Login = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    return (
+        <View style={styles.container}>
+            <Input
+                placeholder='Username'
+                leftIcon={{ type: 'font-awesome', name: 'user', color: 'tomato' }}
+                label='Username'
+                labelStyle={{ color: 'tomato' }}
+                onChangeText={username => setUsername(username)}
+                value={username}
+            />
+            <Input
+                placeholder='Password'
+                leftIcon={{ type: 'font-awesome', name: 'lock', color: 'tomato' }}
+                secureTextEntry={true}
+                label='Password'
+                labelStyle={{ color: 'tomato' }}
+                onChangeText={password => setPassword(password)}
+                value={password}
+            />
+            <Button
+                title="Log in"
+                buttonStyle={{ backgroundColor: 'tomato' }}
+            />
+        </View>
+    )
+};
 
 export default Login;
