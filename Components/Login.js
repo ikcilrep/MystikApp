@@ -14,20 +14,27 @@ const styles = StyleSheet.create({
     }
 });
 
-function handleLogin({ username, password, setErrorMessage }) {
+function handleLogin({ username, password, setErrorMessage, setTokenExpirationDate }) {
     axios.post(`${server_address}/users/authenticate`, {
         username, password
     }, { headers: { 'content-type': 'application/json' } }).then(response => {
         AsyncStorage.setItem('token', response.data.token);
+        AsyncStorage.setItem('tokenExpirationDate', response.data.expirationDate);
         AsyncStorage.setItem('userId', response.data.id);
+        setTokenExpirationDate(Date.parse(response.data.expirationDate));
         setErrorMessage('');
     }).catch(err => {
-        setErrorMessage(err.response.data.message)
-   });
+        const message = err.response.data.message;
+        if (message) {
+            setErrorMessage(message);
+        } else {
+            setErrorMessage('There was an error, try again.');
+        }
+    });
 }
 
 
-const Login = () => {
+const Login = ({ setTokenExpirationDate }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -54,7 +61,7 @@ const Login = () => {
             <Button
                 title="Log in"
                 buttonStyle={{ backgroundColor: 'tomato' }}
-                onPress={() => handleLogin({ username, password, setErrorMessage })}
+                onPress={() => handleLogin({ username, password, setErrorMessage, setTokenExpirationDate })}
             />
         </View>
     )
