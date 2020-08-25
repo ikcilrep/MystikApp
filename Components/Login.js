@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, AsyncStorage, Text } from 'react-native';
 import { Input, Button } from 'react-native-elements';
+import { server_address } from '../settings.json';
+
+const axios = require('axios');
 
 const styles = StyleSheet.create({
     container: {
@@ -11,12 +14,26 @@ const styles = StyleSheet.create({
     }
 });
 
+function handleLogin({ username, password, setErrorMessage }) {
+    axios.post(`${server_address}/users/authenticate`, {
+        username, password
+    }, { headers: { 'content-type': 'application/json' } }).then(response => {
+        AsyncStorage.setItem('token', response.data.token);
+        AsyncStorage.setItem('userId', response.data.id);
+        setErrorMessage('');
+    }).catch(err => {
+        setErrorMessage(err.response.data.message)
+   });
+}
+
+
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
+    const [errorMessage, setErrorMessage] = useState('');
     return (
         <View style={styles.container}>
+            <Text style={{ color: 'red' }}>{errorMessage}</Text>
             <Input
                 placeholder='Username'
                 leftIcon={{ type: 'font-awesome', name: 'user', color: 'tomato' }}
@@ -37,6 +54,7 @@ const Login = () => {
             <Button
                 title="Log in"
                 buttonStyle={{ backgroundColor: 'tomato' }}
+                onPress={() => handleLogin({ username, password, setErrorMessage })}
             />
         </View>
     )
