@@ -15,17 +15,20 @@ const Login = () => (
     <View style={styles.container}>
         <Input
             placeholder='Username'
-            leftIcon={{ type: 'font-awesome', name: 'user' }}
+            leftIcon={{ type: 'font-awesome', name: 'user', color:'tomato' }}
             label='Username'
+            labelStyle={{color: 'tomato'}}
         />
         <Input
             placeholder='Password'
-            leftIcon={{ type: 'font-awesome', name: 'lock' }}
+            leftIcon={{ type: 'font-awesome', name: 'lock', color:'tomato' }}
             secureTextEntry={true}
             label='Password'
+            labelStyle={{color: 'tomato'}}
         />
         <Button
             title="Log in"
+            buttonStyle={{backgroundColor:'tomato'}}
         />
     </View>
 );

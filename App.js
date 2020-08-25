@@ -15,7 +15,10 @@ export default function App() {
     <>
       <Header
         placement='left'
-        centerComponent={{ text: 'MYSTIK', style: { color: '#fff' } }}
+        centerComponent={{ text: 'MYSTIK', style: { color: 'tomato' } }}
+        containerStyle={{
+          backgroundColor: 'white',
+        }}
       />
 
 
