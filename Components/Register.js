@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Input, Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 const styles = StyleSheet.create({
     container: {
