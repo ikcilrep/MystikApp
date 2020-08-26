@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, AsyncStorage, Text } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import { server_address } from '../settings.json';
+import { validateUsername, validatePassword } from '../Helpers/Validation';
 
 const axios = require('axios');
 
@@ -33,11 +34,26 @@ function handleLogin({ username, password, setErrorMessage, setTokenExpirationDa
     });
 }
 
-
 const Login = ({ setTokenExpirationDate }) => {
     const [username, setUsername] = useState('');
+    const [usernameValidation, setUsernameValidation] = useState({ error: true, message: '' });
+
     const [password, setPassword] = useState('');
+    const [passwordValidation, setPasswordValidation] = useState({ error: true, message: '' });
+
     const [errorMessage, setErrorMessage] = useState('');
+
+    const onChangeUsername = username => {
+        setUsername(username);
+        setUsernameValidation(validateUsername(username));
+    };
+
+    const onChangePassword = password => {
+        setPassword(password);
+        setPasswordValidation(validatePassword(password));
+    };
+
+
     return (
         <View style={styles.container}>
             <Text style={{ color: 'red' }}>{errorMessage}</Text>
@@ -46,7 +62,8 @@ const Login = ({ setTokenExpirationDate }) => {
                 leftIcon={{ type: 'font-awesome', name: 'user', color: 'tomato' }}
                 label='Username'
                 labelStyle={{ color: 'tomato' }}
-                onChangeText={username => setUsername(username)}
+                onChangeText={onChangeUsername}
+                errorMessage={usernameValidation.message}
                 value={username}
             />
             <Input
@@ -55,14 +72,18 @@ const Login = ({ setTokenExpirationDate }) => {
                 secureTextEntry={true}
                 label='Password'
                 labelStyle={{ color: 'tomato' }}
-                onChangeText={password => setPassword(password)}
+                onChangeText={onChangePassword}
+                errorMessage={passwordValidation.message}
                 value={password}
             />
-            <Button
-                title="Log in"
-                buttonStyle={{ backgroundColor: 'tomato' }}
-                onPress={() => handleLogin({ username, password, setErrorMessage, setTokenExpirationDate })}
-            />
+            {
+                usernameValidation.error || passwordValidation.error ? <></> :
+                    <Button
+                        title="Log in"
+                        buttonStyle={{ backgroundColor: 'tomato' }}
+                        onPress={() => handleLogin({ username, password, setErrorMessage, setTokenExpirationDate })}
+                    />
+            }
         </View>
     )
 };
