@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { Input, Button } from 'react-native-elements';
+import { serverAddress } from '../settings.json';
 import { validateUsername, validatePassword, validateNickname } from '../Helpers/Validation';
+
+const axios = require('axios');
 
 const styles = StyleSheet.create({
     container: {
@@ -12,7 +15,24 @@ const styles = StyleSheet.create({
     }
 });
 
-const Register = () => {
+function handleRegister({ nickname, username, password, setErrorMessage, navigation}) {
+    axios.post(`${serverAddress}/users/register`, {
+        nickname, username, password
+    }, { headers: { 'content-type': 'application/json' } }).then(_ => {
+        setErrorMessage('');
+        navigation.navigate('Login');
+    }).catch(err => {
+        const message = err.response.data.message;
+        if (message) {
+            setErrorMessage(message);
+        } else {
+            setErrorMessage('There was an error, try again.');
+        }
+    });
+
+}
+
+const Register = ({ navigation }) => {
     const [nickname, setNickname] = useState('');
     const [nicknameValidation, setNicknameValidation] = useState({ error: true, message: '' });
 
@@ -22,8 +42,7 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [passwordValidation, setPasswordValidation] = useState({ error: true, message: '' });
 
-    const [errorMessage, setErrorMessage] = useState('');
-
+    const [errorMessage, setErrorMessage] = useState(''); 
     const onChangeUsername = username => {
         setUsername(username);
         setUsernameValidation(validateUsername(username));
@@ -78,6 +97,7 @@ const Register = () => {
                     <Button
                         title="Sign in"
                         buttonStyle={{ backgroundColor: 'tomato' }}
+                        onPress={() => handleRegister({ nickname, username, password, setErrorMessage, navigation})}
                     />
             }
         </View>
