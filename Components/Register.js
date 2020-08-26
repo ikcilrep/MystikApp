@@ -15,11 +15,12 @@ const styles = StyleSheet.create({
     }
 });
 
-function handleRegister({ nickname, username, password, setErrorMessage, navigation}) {
+function handleRegister({ nickname, username, password, setErrorMessage, navigation, clearFields }) {
     axios.post(`${serverAddress}/users/register`, {
         nickname, username, password
     }, { headers: { 'content-type': 'application/json' } }).then(_ => {
         setErrorMessage('');
+        clearFields();
         navigation.navigate('Login');
     }).catch(err => {
         const message = err.response.data.message;
@@ -42,7 +43,7 @@ const Register = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [passwordValidation, setPasswordValidation] = useState({ error: true, message: '' });
 
-    const [errorMessage, setErrorMessage] = useState(''); 
+    const [errorMessage, setErrorMessage] = useState('');
     const onChangeUsername = username => {
         setUsername(username);
         setUsernameValidation(validateUsername(username));
@@ -56,6 +57,12 @@ const Register = ({ navigation }) => {
     const onChangeNickname = nickname => {
         setNickname(nickname);
         setNicknameValidation(validateNickname(nickname));
+    };
+
+    const clearFields = () => {
+        setNickname('');
+        setUsername('');
+        setPassword('');
     };
 
 
@@ -97,7 +104,7 @@ const Register = ({ navigation }) => {
                     <Button
                         title="Sign in"
                         buttonStyle={{ backgroundColor: 'tomato' }}
-                        onPress={() => handleRegister({ nickname, username, password, setErrorMessage, navigation})}
+                        onPress={() => handleRegister({ nickname, username, password, setErrorMessage, navigation, clearFields })}
                     />
             }
         </View>
