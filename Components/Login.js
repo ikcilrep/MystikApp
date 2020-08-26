@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, AsyncStorage, Text } from 'react-native';
 import { Input, Button } from 'react-native-elements';
-import { server_address } from '../settings.json';
+import { serverAddress } from '../settings.json';
 import { validateUsername, validatePassword } from '../Helpers/Validation';
 
 const axios = require('axios');
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 });
 
 function handleLogin({ username, password, setErrorMessage, setTokenExpirationDate }) {
-    axios.post(`${server_address}/users/authenticate`, {
+    axios.post(`${serverAddress}/users/authenticate`, {
         username, password
     }, { headers: { 'content-type': 'application/json' } }).then(response => {
         AsyncStorage.setItem('token', response.data.token);
