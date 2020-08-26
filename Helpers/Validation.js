@@ -19,6 +19,18 @@ function validateUsername(username) {
     return { error: false, message: '' };
 }
 
+function validateNickname(nickname) {
+    if (isNullOrWhitespace(nickname)) {
+        return { message: 'Nickname is required.', error: true };
+    }
+
+    if (nickname.length > 64) {
+        return { message: "Nickname mustn't be longer than 64 characters", error: true };
+    }
+
+    return { error: false, message: '' };
+}
+
 function validatePassword(password) {
     if (isNullOrWhitespace(password)) {
         return { message: 'Password is required.', error: true };
@@ -51,4 +63,4 @@ function validatePassword(password) {
     return { error: false, message: '' };
 }
 
-export {validateUsername, validatePassword};
+export { validateUsername, validateNickname, validatePassword };
