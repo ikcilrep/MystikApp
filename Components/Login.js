@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     }
 });
 
-function handleLogin({ username, password, setErrorMessage, setTokenExpirationDate }) {
+function handleLogin({ username, password, setErrorMessage, setTokenExpirationDate, clearFields }) {
     axios.post(`${serverAddress}/users/authenticate`, {
         username, password
     }, { headers: { 'content-type': 'application/json' } }).then(response => {
@@ -24,6 +24,7 @@ function handleLogin({ username, password, setErrorMessage, setTokenExpirationDa
         AsyncStorage.setItem('userId', response.data.id);
         setTokenExpirationDate(Date.parse(response.data.expirationDate));
         setErrorMessage('');
+        clearFields();
     }).catch(err => {
         const message = err.response.data.message;
         if (message) {
@@ -51,6 +52,11 @@ const Login = ({ setTokenExpirationDate }) => {
     const onChangePassword = password => {
         setPassword(password);
         setPasswordValidation(validatePassword(password));
+    };
+
+    const clearFields = () => {
+        setUsername('');
+        setPassword('');
     };
 
 
@@ -81,7 +87,7 @@ const Login = ({ setTokenExpirationDate }) => {
                     <Button
                         title="Log in"
                         buttonStyle={{ backgroundColor: 'tomato' }}
-                        onPress={() => handleLogin({ username, password, setErrorMessage, setTokenExpirationDate })}
+                        onPress={() => handleLogin({ username, password, setErrorMessage, setTokenExpirationDate, clearFields })}
                     />
             }
         </View>
