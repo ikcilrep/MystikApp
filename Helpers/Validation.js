@@ -4,7 +4,7 @@ function isNullOrWhitespace(input) {
 
 const hasDigit = string => /\d/.test(string);
 const hasLowerCaseLetter = string => /[a-z]/.test(string);
-const hasUpperCaseLetter = string => /[a-z]/.test(string);
+const hasUpperCaseLetter = string => /[A-Z]/.test(string);
 const hasSpecialCharacter = string => /[#$^+=!*()@%&]/.test(string);
 
 function validateUsername(username) {
